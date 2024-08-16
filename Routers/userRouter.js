@@ -13,6 +13,11 @@ router.post('/add',(req,res) => {
     })
     .catch((err) => {
         console.log(err);
+        if (err.code === 11000) {
+            res.status(500).json({ message: 'email already exists'})
+        } else {
+            res.status(500).json({ message: 'something went wrong'})
+        }
         res.status(500).json(err);
     });
 });
@@ -64,8 +69,13 @@ router.get('/getbyid/:id',(req,res) => {
 });
 
 //update
-router.get('/update',(req,res) => {
-    res.send('Responses from user update');
+router.put('/update/:id',(req,res) => {
+    Model.findByIdAndUpdate(req.params.id, req.body { new: true})
+    .then((result) => {
+        res.status(200).json(result);      
+    }).catch((err) => {
+        res.status(500).json(err);   
+    });
 });
 
 //delete
